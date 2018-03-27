@@ -90,9 +90,9 @@ GameObject:
   - component: {fileID: 4705841123627534}
   - component: {fileID: 33160874599100086}
   - component: {fileID: 23679823666879080}
-  - component: {fileID: 114196693456439740}
   - component: {fileID: 54588632634083980}
   - component: {fileID: 65037550738196936}
+  - component: {fileID: 114196693456439740}
   m_Layer: 0
   m_Name: House 1
   m_TagString: Untagged

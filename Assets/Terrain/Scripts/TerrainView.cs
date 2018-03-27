@@ -5,6 +5,7 @@ using UnityEngine;
 public class TerrainView : MonoBehaviour {
 
 	public TerrainController terrainController;
+    public GameController gameController;
     public GameObject containerPanel;
     private bool _terrainMapButton;
     private bool _sineFunctionButton;
@@ -23,10 +24,12 @@ public class TerrainView : MonoBehaviour {
     }
 
     public void ActivateSineFunction() {
+        // terrainController.ResetCollider();
+        gameController.ResetObjectsCollider();
         _sineFunctionButton = !_sineFunctionButton;
         _sineFunction2Button = false;
         if (_sineFunctionButton) {
-            terrainController.function = FunctionOption.Sine;
+            terrainController.utils.function = (int)FunctionOption.Sine;
             terrainController.StartChanges();
         } else {
             terrainController.StopChanges();
@@ -34,10 +37,12 @@ public class TerrainView : MonoBehaviour {
     }
 
     public void ActivateComplexSineFunction() {
+        // terrainController.ResetCollider();
+        gameController.ResetObjectsCollider();
         _sineFunction2Button = !_sineFunction2Button;
         _sineFunctionButton = false;
         if (_sineFunction2Button) {
-            terrainController.function = FunctionOption.ComplexSine;
+            terrainController.utils.function = (int)FunctionOption.ComplexSine;
             terrainController.StartChanges();
         } else {
             terrainController.StopChanges();

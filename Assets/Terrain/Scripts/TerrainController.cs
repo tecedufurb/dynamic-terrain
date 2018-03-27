@@ -4,15 +4,15 @@ using TerrainUtilsDLL;
 
 public class TerrainController : MonoBehaviour {
 
-    public FunctionOption function;
+    // public FunctionOption function;
 
 	private Terrain _terrain;
 	private static int _resolutionX;
     private static int _resolutionZ;
 	private static float[,] _heights;
-    private TerrainHeight _utils;
-    private Coroutine _changeHeight;
-    private bool _changed = false;
+    public TerrainHeight utils;
+    // private Coroutine _changeHeight;
+    // private bool _changed = false;
 
 	void Start () {        
 		_terrain = GetComponent<Terrain>();
@@ -20,28 +20,25 @@ public class TerrainController : MonoBehaviour {
         _resolutionZ = _terrain.terrainData.heightmapHeight;
 		_heights = _terrain.terrainData.GetHeights(0, 0, _resolutionX, _resolutionZ);
 
-        _utils = new TerrainHeight(_resolutionX, _resolutionZ);
+        utils = new TerrainHeight(_resolutionX, _resolutionZ);
 
         ResetHeight();
         ResetColor();
+
+        StartCoroutine(utils.ChangeHeight(.5f));
 	}
 
 	void Update () {
-        if (_changed)
-            _terrain.terrainData.SetHeights(0, 0, _utils.heights);
+        if (utils.change)
+            _terrain.terrainData.SetHeights(0, 0, utils.heights);
     }
 
     public void StartChanges () {
-        _changed = true;
-        if (_changeHeight != null)
-            StopCoroutine(_changeHeight);
-        _changeHeight = StartCoroutine(_utils.ChangeHeight((int)function));
+        utils.change = true;
     }
 
     public void StopChanges () {
-        _changed = false;
-        if (_changeHeight != null)
-            StopCoroutine(_changeHeight);
+        utils.change = false;
     }
 
 	private void ResetHeight () {
@@ -58,8 +55,8 @@ public class TerrainController : MonoBehaviour {
         while(true) {
             for (int x = 0; x < _resolutionX-1; x++) {
                 for (int y = 0; y < _resolutionZ-1; y++) {
-                    alphaMap[x, y, 0] = 1.0f - _utils.heights[x, y];
-                    alphaMap[x, y, 1] = _utils.heights[x, y];
+                    alphaMap[x, y, 0] = 1.0f - utils.heights[x, y];
+                    alphaMap[x, y, 1] = utils.heights[x, y];
                 }
             }
             _terrain.terrainData.SetAlphamaps(0, 0, alphaMap); 
@@ -92,6 +89,7 @@ public class TerrainController : MonoBehaviour {
     }
 
     public void ResetCollider () {
-        // TODO
+        GetComponent<TerrainCollider>().enabled = false;
+        GetComponent<TerrainCollider>().enabled = true;
     }
 }

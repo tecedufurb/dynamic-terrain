@@ -7,26 +7,37 @@ public class ObjectController : MonoBehaviour {
 	// private float positionX;
 	// private float positionZ;
 	// private Quaternion rotation;
+	private bool isGround = false;
 
-	// Use this for initialization
-	void Start () {
-		// positionX = transform.position.x;
-		// positionZ = transform.position.z;
-		// rotation = transform.rotation;
-		// StartCoroutine(lifeTime(5));
+    public bool IsGround 
+	{
+        get {
+            return isGround;
+        }
+        set {
+            isGround = value;
+        }
+    }
+
+	/// <summary>
+	/// OnCollisionEnter is called when this collider/rigidbody has begun
+	/// touching another rigidbody/collider.
+	/// </summary>
+	/// <param name="other">The Collision data associated with this collision.</param>
+	void OnCollisionEnter(Collision other)
+	{
+		if (other.gameObject.CompareTag("Surface"))
+			IsGround = true;
 	}
 
 	/// <summary>
-	/// This function is called every fixed framerate frame, if the MonoBehaviour is enabled.
+	/// OnCollisionExit is called when this collider/rigidbody has
+	/// stopped touching another rigidbody/collider.
 	/// </summary>
-	void FixedUpdate()
+	/// <param name="other">The Collision data associated with this collision.</param>
+	void OnCollisionExit(Collision other)
 	{
-		// transform.position = new Vector3(positionX, transform.position.y, positionZ);
-		// transform.rotation = rotation;
-	}
-
-	private IEnumerator lifeTime (float time) {
-		yield return new WaitForSeconds(time);
-		Destroy(gameObject);
+		if (other.gameObject.CompareTag("Surface"))
+			IsGround = false;
 	}
 }
