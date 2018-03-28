@@ -17,6 +17,9 @@ public class GameController : MonoBehaviour {
 	{
 		if(Input.GetButtonDown("Fire1"))
 			InstantiateBuilding();
+		
+		if(Input.GetButtonDown("Fire2"))
+			DestroyBuilding();
 	}
 
 	public void ResetObjectsCollider () {
@@ -41,6 +44,19 @@ public class GameController : MonoBehaviour {
 					hit.point.y + buildings[rand].transform.localScale.y, hit.point.z);
 				GameObject newBuilding = Instantiate(buildings[rand], position, Quaternion.identity);
 				buildingList.Add(newBuilding.GetComponent<ObjectController>());
+			}
+		}
+	}
+
+	private void DestroyBuilding () 
+	{
+		Ray ray;
+		RaycastHit hit;
+		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		if (Physics.Raycast(ray, out hit, 100.0f)) {
+			if (hit.collider.tag=="Building") {
+				Destroy(hit.collider.gameObject);
+				buildingList.Remove(hit.collider.gameObject.GetComponent<ObjectController>());
 			}
 		}
 	}
