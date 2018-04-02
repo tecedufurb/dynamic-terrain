@@ -7,14 +7,12 @@ public class GameController : MonoBehaviour {
 	private List<ObjectController> buildingList;
 	private TerrainController terrainController;
 
-	void Start()
-	{
+	void Start() {
 		buildingList = new List<ObjectController>();
 		terrainController = GameObject.FindObjectOfType<TerrainController>();
 	}
 
-	void Update () 
-	{
+	void Update () {
 		if(Input.GetButtonDown("Fire1"))
 			InstantiateBuilding();
 		
@@ -32,13 +30,12 @@ public class GameController : MonoBehaviour {
 		}
 	} 
 
-	private void InstantiateBuilding () 
-	{
+	private void InstantiateBuilding () {
 		Ray ray;
 		RaycastHit hit;
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out hit, 100.0f)) {
-			if (hit.collider.tag=="Surface") {
+			if (hit.collider.CompareTag("Surface")) {
 				int rand = Random.Range(0, buildings.Length);
 				Vector3 position = new Vector3(hit.point.x, 
 					hit.point.y + buildings[rand].transform.localScale.y, hit.point.z);
@@ -48,16 +45,21 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
-	private void DestroyBuilding () 
-	{
+	private void DestroyBuilding () {
 		Ray ray;
 		RaycastHit hit;
 		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out hit, 100.0f)) {
-			if (hit.collider.tag=="Building") {
+			if (hit.collider.CompareTag("Building")) {
 				Destroy(hit.collider.gameObject);
 				buildingList.Remove(hit.collider.gameObject.GetComponent<ObjectController>());
 			}
+		}
+	}
+
+	public void ActivateGravity (bool value) {
+		foreach (ObjectController o in buildingList) {
+			o.gameObject.GetComponent<Rigidbody>().isKinematic = value;
 		}
 	}
 }

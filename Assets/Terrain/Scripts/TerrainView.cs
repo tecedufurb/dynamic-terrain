@@ -10,6 +10,7 @@ public class TerrainView : MonoBehaviour {
     private bool _terrainMapButton;
     private bool _sineFunctionButton;
     private bool _sineFunction2Button;
+	private bool kinematic = true;
     private Coroutine _terrainMapCoroutine;
 
 	 public void ActivateTerrainMap() {
@@ -55,4 +56,9 @@ public class TerrainView : MonoBehaviour {
         else
             containerPanel.SetActive(true);
     }
+
+	public void ActivateGravity () {
+		kinematic = !kinematic;
+		gameController.ActivateGravity(kinematic);
+	}
 }

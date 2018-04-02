@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ObjectController : MonoBehaviour {
 
@@ -9,8 +7,7 @@ public class ObjectController : MonoBehaviour {
 	// private Quaternion rotation;
 	private bool isGround = false;
 
-    public bool IsGround 
-	{
+    public bool IsGround {
         get {
             return isGround;
         }
@@ -24,8 +21,7 @@ public class ObjectController : MonoBehaviour {
 	/// touching another rigidbody/collider.
 	/// </summary>
 	/// <param name="other">The Collision data associated with this collision.</param>
-	void OnCollisionEnter(Collision other)
-	{
+	void OnCollisionEnter(Collision other) {
 		if (other.gameObject.CompareTag("Surface"))
 			IsGround = true;
 	}
@@ -35,8 +31,7 @@ public class ObjectController : MonoBehaviour {
 	/// stopped touching another rigidbody/collider.
 	/// </summary>
 	/// <param name="other">The Collision data associated with this collision.</param>
-	void OnCollisionExit(Collision other)
-	{
+	void OnCollisionExit(Collision other) {
 		if (other.gameObject.CompareTag("Surface"))
 			IsGround = false;
 	}
