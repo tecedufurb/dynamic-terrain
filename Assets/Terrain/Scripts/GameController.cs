@@ -4,6 +4,10 @@ using UnityEngine;
 public class GameController : MonoBehaviour {
 
 	public GameObject[] buildings;
+	private bool addBuildings;
+	private bool removeBuildings;
+	private bool moveBuildings;
+
 	private List<ObjectController> buildingList;
 	private TerrainController terrainController;
 
@@ -12,12 +16,17 @@ public class GameController : MonoBehaviour {
 		terrainController = GameObject.FindObjectOfType<TerrainController>();
 	}
 
-	void Update () {
-		if(Input.GetButtonDown("Fire1"))
-			InstantiateBuilding();
+	void FixedUpdate () {
 		
-		if(Input.GetButtonDown("Fire2"))
-			DestroyBuilding();
+		if(Input.GetButtonDown("Fire1")) {
+			if (addBuildings)
+				InstantiateBuilding();
+			else if (removeBuildings)
+				DestroyBuilding();
+			else if (moveBuildings)
+				MoveBuilding();
+		}
+			
 	}
 
 	public void ResetObjectsCollider () {
@@ -57,9 +66,31 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
+	private void MoveBuilding () {
+		// TODO - drag on click
+	}
+
 	public void ActivateGravity (bool value) {
 		foreach (ObjectController o in buildingList) {
 			o.gameObject.GetComponent<Rigidbody>().isKinematic = value;
 		}
+	}
+
+	public void Add () {
+		addBuildings = true;
+		removeBuildings = false;
+		moveBuildings = false;
+	}
+
+	public void Remove () {
+		removeBuildings = true;
+		addBuildings = false;
+		moveBuildings = false;
+	}
+
+	public void Move () {
+		moveBuildings = true;
+		addBuildings = false;		
+		removeBuildings = false;
 	}
 }

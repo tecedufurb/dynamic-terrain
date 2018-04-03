@@ -1,25 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class TerrainView : MonoBehaviour {
 
 	public TerrainController terrainController;
     public GameController gameController;
     public GameObject containerPanel;
-    private bool _terrainMapButton;
-    private bool _sineFunctionButton;
-    private bool _sineFunction2Button;
+	public Text playButtonText;
+	public Text gravityButtonText;
+    public Button addButton;
+    public Button removeButton;
+    public Button moveButton;
+
+    private bool terrainMapButton;
+    private bool sineFunctionButton;
+    private bool playButton;
 	private bool kinematic = true;
-    private Coroutine _terrainMapCoroutine;
+    private Coroutine terrainMapCoroutine;
 
-	 public void ActivateTerrainMap() {
-        _terrainMapButton = !_terrainMapButton;
+	public void ActivateHipsometricMap() {
+        terrainMapButton = !terrainMapButton;
 
-        if(_terrainMapButton) {
-            _terrainMapCoroutine = StartCoroutine(terrainController.UpdateHeatMap());
+        if(terrainMapButton) {
+            terrainMapCoroutine = StartCoroutine(terrainController.UpdateHeatMap());
         } else {
-            StopCoroutine(_terrainMapCoroutine);
+            StopCoroutine(terrainMapCoroutine);
             terrainController.ResetColor();
         }
     }
@@ -27,9 +32,9 @@ public class TerrainView : MonoBehaviour {
     public void ActivateSineFunction() {
         // terrainController.ResetCollider();
         gameController.ResetObjectsCollider();
-        _sineFunctionButton = !_sineFunctionButton;
-        _sineFunction2Button = false;
-        if (_sineFunctionButton) {
+        sineFunctionButton = !sineFunctionButton;
+		playButton = false;
+        if (sineFunctionButton) {
             terrainController.utils.function = (int)FunctionOption.Sine;
             terrainController.StartChanges();
         } else {
@@ -37,16 +42,18 @@ public class TerrainView : MonoBehaviour {
         }            
     }
 
-    public void ActivateComplexSineFunction() {
+    public void ChangeTerrainFunction() {
         // terrainController.ResetCollider();
         gameController.ResetObjectsCollider();
-        _sineFunction2Button = !_sineFunction2Button;
-        _sineFunctionButton = false;
-        if (_sineFunction2Button) {
+		playButton = !playButton;
+        sineFunctionButton = false;
+		if (playButton) {
             terrainController.utils.function = (int)FunctionOption.ComplexSine;
             terrainController.StartChanges();
+			playButtonText.text = "Pausar";
         } else {
             terrainController.StopChanges();
+			playButtonText.text = "Iniciar";
         }
     }
 
@@ -60,5 +67,30 @@ public class TerrainView : MonoBehaviour {
 	public void ActivateGravity () {
 		kinematic = !kinematic;
 		gameController.ActivateGravity(kinematic);
+		if (kinematic)
+			gravityButtonText.text = "Ativar gravidade";
+		else
+			gravityButtonText.text = "Desativar gravidade";
+	}
+
+	public void AddBuildingsButton () {
+		gameController.Add();
+        addButton.GetComponent<Image>().color = Color.gray;
+        removeButton.GetComponent<Image>().color = Color.white;
+        moveButton.GetComponent<Image>().color = Color.white;
+	}
+
+    public void RemoveBuildingsButton () {
+		gameController.Remove();
+        removeButton.GetComponent<Image>().color = Color.gray;
+        addButton.GetComponent<Image>().color = Color.white;
+        moveButton.GetComponent<Image>().color = Color.white;
+	}
+
+    public void MoveBuildingsButton () {
+		gameController.Move();
+        moveButton.GetComponent<Image>().color = Color.gray;
+        addButton.GetComponent<Image>().color = Color.white;
+        removeButton.GetComponent<Image>().color = Color.white;
 	}
 }
