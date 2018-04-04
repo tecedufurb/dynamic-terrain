@@ -4,9 +4,9 @@ using UnityEngine;
 public class GameController : MonoBehaviour {
 
 	public GameObject[] buildings;
-	private bool addBuildings;
-	private bool removeBuildings;
-	private bool moveBuildings;
+	public bool addBuildings;
+	public bool removeBuildings;
+	public bool moveBuildings;
 
 	private List<ObjectController> buildingList;
 	private TerrainController terrainController;
@@ -71,26 +71,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void ActivateGravity (bool value) {
-		foreach (ObjectController o in buildingList) {
+		foreach (ObjectController o in buildingList)
 			o.gameObject.GetComponent<Rigidbody>().isKinematic = value;
-		}
-	}
-
-	public void Add () {
-		addBuildings = true;
-		removeBuildings = false;
-		moveBuildings = false;
-	}
-
-	public void Remove () {
-		removeBuildings = true;
-		addBuildings = false;
-		moveBuildings = false;
-	}
-
-	public void Move () {
-		moveBuildings = true;
-		addBuildings = false;		
-		removeBuildings = false;
 	}
 }

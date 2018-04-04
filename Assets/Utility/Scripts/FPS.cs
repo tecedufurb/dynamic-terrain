@@ -4,7 +4,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Calculates the FPS of the Scene.
 /// </summary>
-/// Needs to be attached to a UI Text component.
+/// Needs to be attached to an UI Text component.
 public class FPS : MonoBehaviour {
 
 	public Text text;
@@ -17,6 +17,6 @@ public class FPS : MonoBehaviour {
     
     void OnGUI() {
         mFps = 1.0f / mDeltaTime;
-        text.text = "" + (int) mFps;
+        text.text = "FPS: " + (int) mFps;
     }
 }

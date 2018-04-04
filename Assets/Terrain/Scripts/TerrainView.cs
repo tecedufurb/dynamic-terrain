@@ -3,14 +3,14 @@ using UnityEngine.UI;
 
 public class TerrainView : MonoBehaviour {
 
-	public TerrainController terrainController;
-    public GameController gameController;
-    public GameObject containerPanel;
-	public Text playButtonText;
-	public Text gravityButtonText;
-    public Button addButton;
-    public Button removeButton;
-    public Button moveButton;
+	[SerializeField] private TerrainController terrainController;
+    [SerializeField] private GameController gameController;
+    [SerializeField] private GameObject containerPanel;
+	[SerializeField] private Text playButtonText;
+    [SerializeField] private Button gravityButton;
+    [SerializeField] private Button addButton;
+    [SerializeField] private Button removeButton;
+    [SerializeField] private Button moveButton;
 
     private bool terrainMapButton;
     private bool sineFunctionButton;
@@ -67,30 +67,60 @@ public class TerrainView : MonoBehaviour {
 	public void ActivateGravity () {
 		kinematic = !kinematic;
 		gameController.ActivateGravity(kinematic);
-		if (kinematic)
-			gravityButtonText.text = "Ativar gravidade";
-		else
-			gravityButtonText.text = "Desativar gravidade";
-	}
+		if (kinematic) {
+			// gravityButtonText.text = "Ativar gravidade";
+            gravityButton.transform.GetChild(0).GetComponent<Text>().text = "Ativar gravidade";
+            gravityButton.GetComponent<Image>().color = Color.white;
+		} else {
+			// gravityButtonText.text = "Desativar gravidade";
+            gravityButton.transform.GetChild(0).GetComponent<Text>().text = "Desativar gravidade";
+            gravityButton.GetComponent<Image>().color = Color.gray;
+        }
+    }
 
 	public void AddBuildingsButton () {
-		gameController.Add();
-        addButton.GetComponent<Image>().color = Color.gray;
-        removeButton.GetComponent<Image>().color = Color.white;
-        moveButton.GetComponent<Image>().color = Color.white;
+        if (!gameController.addBuildings) {
+            gameController.addBuildings = true;
+            gameController.removeBuildings = false;
+            gameController.moveBuildings = false;
+            
+            addButton.GetComponent<Image>().color = Color.gray;
+            removeButton.GetComponent<Image>().color = Color.white;
+            moveButton.GetComponent<Image>().color = Color.white;
+        } else {
+            gameController.addBuildings = false;
+            addButton.GetComponent<Image>().color = Color.white;
+        }
+        
 	}
 
     public void RemoveBuildingsButton () {
-		gameController.Remove();
-        removeButton.GetComponent<Image>().color = Color.gray;
-        addButton.GetComponent<Image>().color = Color.white;
-        moveButton.GetComponent<Image>().color = Color.white;
+		if (!gameController.removeBuildings) {
+            gameController.removeBuildings = true;
+            gameController.addBuildings = false;
+            gameController.moveBuildings = false;
+
+            removeButton.GetComponent<Image>().color = Color.gray;
+            addButton.GetComponent<Image>().color = Color.white;
+            moveButton.GetComponent<Image>().color = Color.white;
+        } else {
+            gameController.removeBuildings = false;
+            removeButton.GetComponent<Image>().color = Color.white;
+        }
 	}
 
     public void MoveBuildingsButton () {
-		gameController.Move();
-        moveButton.GetComponent<Image>().color = Color.gray;
-        addButton.GetComponent<Image>().color = Color.white;
-        removeButton.GetComponent<Image>().color = Color.white;
+        if (!gameController.moveBuildings) {
+            gameController.moveBuildings = true;
+            gameController.addBuildings = false;		
+            gameController.removeBuildings = false;
+
+            moveButton.GetComponent<Image>().color = Color.gray;
+            addButton.GetComponent<Image>().color = Color.white;
+            removeButton.GetComponent<Image>().color = Color.white;
+        } else {
+            gameController.moveBuildings = false;
+            moveButton.GetComponent<Image>().color = Color.white;
+        }
 	}
 }

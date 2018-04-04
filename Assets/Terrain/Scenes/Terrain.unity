@@ -1286,7 +1286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.79911107, g: 0.9705882, b: 0.01427337, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1296,17 +1296,17 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 14
-    m_FontStyle: 1
+    m_FontStyle: 0
     m_BestFit: 1
     m_MinSize: 10
-    m_MaxSize: 30
+    m_MaxSize: 15
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: FPS
+  m_Text: 'FPS: '
 --- !u!222 &1237494771
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1328,8 +1328,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 64, y: -25}
-  m_SizeDelta: {x: 98.7, y: 50}
+  m_AnchoredPosition: {x: 78.2, y: -18}
+  m_SizeDelta: {x: 136.79, y: 26.84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1276228268
 GameObject:
@@ -1574,7 +1574,7 @@ MonoBehaviour:
   gameController: {fileID: 1992830804}
   containerPanel: {fileID: 170559045}
   playButtonText: {fileID: 718199931}
-  gravityButtonText: {fileID: 1381325174}
+  gravityButton: {fileID: 1276228270}
   addButton: {fileID: 1785972465}
   removeButton: {fileID: 307483138}
   moveButton: {fileID: 2144714581}
@@ -1958,6 +1958,9 @@ MonoBehaviour:
   - {fileID: 1860825893777824, guid: 85cebbac2ced00c459a776ce9058140c, type: 2}
   - {fileID: 1466083172924116, guid: 1134dade9097ba54bbaed05d95e7b193, type: 2}
   - {fileID: 1466083172924116, guid: da230c133fc3fee4cb7e73a27439559e, type: 2}
+  addBuildings: 0
+  removeBuildings: 0
+  moveBuildings: 0
 --- !u!4 &1992830805
 Transform:
   m_ObjectHideFlags: 0
