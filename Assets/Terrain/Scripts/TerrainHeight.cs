@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class TerrainHeight
-{
+public class TerrainHeight {
+	
 	public float[,] heights;
 	public int resolutionX;
 	public int resolutionZ;
@@ -36,10 +36,7 @@ public class TerrainHeight
 			if (change) {
 				for (int x = 0; x < resolutionX; x++) {
 					for (int z = 0; z < resolutionZ; z++) {
-						if (function == 0)
-							heights[x, z] = MathFunctions.Sine(x * step) * height;
-						else
-							heights[x, z] = 0.5f + MathFunctions.Sine(x * step, z * step) * height;
+						heights[x, z] = 0.5f + MathFunctions.Sine(x * step, z * step) * height;
 					}
 				}
 			}

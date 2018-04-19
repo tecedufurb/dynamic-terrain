@@ -2,9 +2,6 @@
 
 public class ObjectController : MonoBehaviour {
 
-	// private float positionX;
-	// private float positionZ;
-	// private Quaternion rotation;
 	private bool isGround = false;
 
     public bool IsGround {

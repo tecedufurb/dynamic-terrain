@@ -1954,13 +1954,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildings:
-  - {fileID: 1860825893777824, guid: ba7755e05bbc2a548b5fe36628656162, type: 2}
-  - {fileID: 1860825893777824, guid: 85cebbac2ced00c459a776ce9058140c, type: 2}
-  - {fileID: 1466083172924116, guid: 1134dade9097ba54bbaed05d95e7b193, type: 2}
-  - {fileID: 1466083172924116, guid: da230c133fc3fee4cb7e73a27439559e, type: 2}
+  - {fileID: 174276, guid: 4504c139137f6bd488c29a42ddafd80e, type: 2}
+  - {fileID: 179992, guid: 7251e79677a9bdd469f7b036eb8a4cd1, type: 2}
   addBuildings: 0
   removeBuildings: 0
   moveBuildings: 0
+  gravity: 1
 --- !u!4 &1992830805
 Transform:
   m_ObjectHideFlags: 0

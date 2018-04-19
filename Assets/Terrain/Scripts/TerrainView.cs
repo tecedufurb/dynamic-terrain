@@ -30,7 +30,6 @@ public class TerrainView : MonoBehaviour {
     }
 
     public void ActivateSineFunction() {
-        // terrainController.ResetCollider();
         gameController.ResetObjectsCollider();
         sineFunctionButton = !sineFunctionButton;
 		playButton = false;
@@ -43,7 +42,6 @@ public class TerrainView : MonoBehaviour {
     }
 
     public void ChangeTerrainFunction() {
-        // terrainController.ResetCollider();
         gameController.ResetObjectsCollider();
 		playButton = !playButton;
         sineFunctionButton = false;
@@ -65,14 +63,13 @@ public class TerrainView : MonoBehaviour {
     }
 
 	public void ActivateGravity () {
-		kinematic = !kinematic;
-		gameController.ActivateGravity(kinematic);
-		if (kinematic) {
-			// gravityButtonText.text = "Ativar gravidade";
+		//kinematic = !kinematic;
+		gameController.gravity = !gameController.gravity;
+        gameController.ActivateGravity(gameController.gravity);
+		if (gameController.gravity) {
             gravityButton.transform.GetChild(0).GetComponent<Text>().text = "Ativar gravidade";
             gravityButton.GetComponent<Image>().color = Color.white;
 		} else {
-			// gravityButtonText.text = "Desativar gravidade";
             gravityButton.transform.GetChild(0).GetComponent<Text>().text = "Desativar gravidade";
             gravityButton.GetComponent<Image>().color = Color.gray;
         }

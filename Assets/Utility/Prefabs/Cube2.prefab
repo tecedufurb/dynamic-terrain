@@ -57,7 +57,8 @@ GameObject:
   - component: {fileID: 65264735188069996}
   - component: {fileID: 23546821933355670}
   - component: {fileID: 54461539267214908}
-  - component: {fileID: 114324381354594794}
+  - component: {fileID: 114333618838724858}
+  - component: {fileID: 114007937315401090}
   m_Layer: 0
   m_Name: Cube2
   m_TagString: Building
@@ -545,7 +546,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114324381354594794
+--- !u!114 &114007937315401090
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -554,5 +555,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 501d2b0f9f1708f4a814b463b3921e4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114333618838724858
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1243173137864474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f33ef14c079fa154abdbbed7d3b24e4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

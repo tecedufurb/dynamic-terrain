@@ -4,12 +4,12 @@ using UnityEngine;
 public class TerrainController : MonoBehaviour {
 
     // public FunctionOption function;
+    public TerrainHeight utils;
 
 	private Terrain _terrain;
 	private static int _resolutionX;
     private static int _resolutionZ;
 	private static float[,] _heights;
-    public TerrainHeight utils;
     // private Coroutine _changeHeight;
     // private bool _changed = false;
 
@@ -23,7 +23,6 @@ public class TerrainController : MonoBehaviour {
 
         ResetHeight();
         ResetColor();
-
         StartCoroutine(utils.ChangeHeight(.5f));
 	}
 
