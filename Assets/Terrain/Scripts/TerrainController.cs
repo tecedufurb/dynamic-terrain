@@ -1,11 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Diagnostics;
+using System.IO;
 using UnityEngine;
 
 public class TerrainController : MonoBehaviour {
 
     // public FunctionOption function;
     public TerrainHeight utils;
-
 	private Terrain _terrain;
 	private static int _resolutionX;
     private static int _resolutionZ;
@@ -13,7 +15,7 @@ public class TerrainController : MonoBehaviour {
     // private Coroutine _changeHeight;
     // private bool _changed = false;
 
-	void Start () {        
+    void Start () {        
 		_terrain = GetComponent<Terrain>();
 		_resolutionX = _terrain.terrainData.heightmapWidth;
         _resolutionZ = _terrain.terrainData.heightmapHeight;
@@ -21,15 +23,22 @@ public class TerrainController : MonoBehaviour {
 
         utils = new TerrainHeight(_resolutionX, _resolutionZ);
 
+        StartModifications();
+        
+//        utils.StartModifications();
+//        utils.readMatrixFromFile("Assets\\Resources\\height_map.txt");
+//        utils.ReadHeightMapFile2("Assets\\Resources\\height_map.txt");
+
         ResetHeight();
         ResetColor();
-        StartCoroutine(utils.ChangeHeight(.5f));
+        StartCoroutine(ReadHeightMapFile("Assets\\Resources\\height_map.txt"));
+//        StartCoroutine(utils.ChangeHeight(.5f));
 	}
 
-	void Update () {
-        if (utils.change)
-            _terrain.terrainData.SetHeights(0, 0, utils.heights);
-    }
+//	void Update () {
+//        if (utils.change)
+//            _terrain.terrainData.SetHeights(0, 0, utils.heights);
+//    }
 
     public void StartChanges () {
         utils.change = true;
@@ -86,8 +95,35 @@ public class TerrainController : MonoBehaviour {
         _terrain.terrainData.SetAlphamaps(0, 0, alphaMap);
     }
 
-    public void ResetCollider () {
-        GetComponent<TerrainCollider>().enabled = false;
-        GetComponent<TerrainCollider>().enabled = true;
+    private IEnumerator ReadHeightMapFile (string fileName) {
+        byte[] bytes = File.ReadAllBytes(fileName);
+
+        int size = bytes.Length/4;
+        size = (int)Math.Sqrt(size);
+        float[,] heights = new float[size, size];
+
+        while (true) {
+            try {
+                bytes = File.ReadAllBytes(fileName);
+            } catch (IOException) {
+                continue;
+            }
+            for (int i = 0, k = 0; i < size; i++) {
+                for (int j = 0; j < size; j++, k++) {
+                    heights[i, j] = BitConverter.ToSingle(bytes, k * 4)/10;
+                }
+            }
+            _terrain.terrainData.SetHeights(0, 0, heights);
+            yield return null;
+        }
     }
+
+    private void StartModifications () {
+		Process.Start("C:\\Users\\Nemo\\CLionProjects\\TerrainHeight\\cmake-build-debug\\TerrainHeight.exe");
+	}
+    
+//    public void ResetCollider () {
+//        GetComponent<TerrainCollider>().enabled = false;
+//        GetComponent<TerrainCollider>().enabled = true;
+//    }
 }
