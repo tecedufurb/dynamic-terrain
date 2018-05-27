@@ -797,7 +797,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 73.85, y: 0.000005722046}
+  m_AnchoredPosition: {x: 73.8501, y: 0.000005722046}
   m_SizeDelta: {x: 147.7, y: 321.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &673735694
@@ -989,8 +989,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 780934932}
-  m_LocalRotation: {x: 0.20655505, y: 0.67626554, z: -0.20655505, w: 0.67626554}
-  m_LocalPosition: {x: -28.4, y: 44.2, z: 24.83}
+  m_LocalRotation: {x: -0.47168827, y: 0.52563345, z: -0.4627027, w: -0.5358413}
+  m_LocalPosition: {x: 179, y: 357, z: 191}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1573,7 +1573,6 @@ MonoBehaviour:
   terrainController: {fileID: 2137987433}
   gameController: {fileID: 1992830804}
   containerPanel: {fileID: 170559045}
-  playButtonText: {fileID: 718199931}
   gravityButton: {fileID: 1276228270}
   addButton: {fileID: 1785972465}
   removeButton: {fileID: 307483138}
@@ -2130,7 +2129,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e3849e41bf7da542bcc369d7c26b9a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  utils: {fileID: 0}
 --- !u!1 &2144714579
 GameObject:
   m_ObjectHideFlags: 0

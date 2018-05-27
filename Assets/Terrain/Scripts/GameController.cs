@@ -10,11 +10,9 @@ public class GameController : MonoBehaviour {
 	public bool gravity = true;
 
 	private List<GameObject> buildingList;
-	private TerrainController terrainController;
 
 	void Start() {
 		buildingList = new List<GameObject>();
-		terrainController = GameObject.FindObjectOfType<TerrainController>();
 	}
 
 	void FixedUpdate () {
@@ -36,9 +34,8 @@ public class GameController : MonoBehaviour {
 	}
 
 	private void InstantiateBuilding () {
-		Ray ray;
 		RaycastHit hit;
-		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out hit, 100.0f)) {
 			if (hit.collider.CompareTag("Surface")) {
 				int rand = Random.Range(0, buildings.Length);
@@ -52,9 +49,8 @@ public class GameController : MonoBehaviour {
 	}
 
 	private void DestroyBuilding () {
-		Ray ray;
 		RaycastHit hit;
-		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out hit, 100.0f)) {
 			if (hit.collider.CompareTag("Building")) {
 				Destroy(hit.collider.gameObject);
@@ -67,7 +63,7 @@ public class GameController : MonoBehaviour {
 		
 	}
 
-	public void ActivateGravity (bool value) {
+	public void ActivateGravity (bool value = true) {
 		foreach (GameObject o in buildingList)
 			o.GetComponent<Rigidbody>().isKinematic = value;
 	}

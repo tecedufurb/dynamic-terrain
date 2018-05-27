@@ -6,7 +6,6 @@ public class TerrainView : MonoBehaviour {
 	[SerializeField] private TerrainController terrainController;
     [SerializeField] private GameController gameController;
     [SerializeField] private GameObject containerPanel;
-	[SerializeField] private Text playButtonText;
     [SerializeField] private Button gravityButton;
     [SerializeField] private Button addButton;
     [SerializeField] private Button removeButton;
@@ -22,36 +21,11 @@ public class TerrainView : MonoBehaviour {
         terrainMapButton = !terrainMapButton;
 
         if(terrainMapButton) {
-            terrainMapCoroutine = StartCoroutine(terrainController.UpdateHeatMap());
+//            terrainMapCoroutine = StartCoroutine(terrainController.UpdateHeatMap());
+            terrainController.UpdateHeatMap();
         } else {
-            StopCoroutine(terrainMapCoroutine);
+//            StopCoroutine(terrainMapCoroutine);
             terrainController.ResetColor();
-        }
-    }
-
-    public void ActivateSineFunction() {
-        gameController.ResetObjectsCollider();
-        sineFunctionButton = !sineFunctionButton;
-		playButton = false;
-        if (sineFunctionButton) {
-            terrainController.utils.function = (int)FunctionOption.Sine;
-            terrainController.StartChanges();
-        } else {
-            terrainController.StopChanges();
-        }            
-    }
-
-    public void ChangeTerrainFunction() {
-        gameController.ResetObjectsCollider();
-		playButton = !playButton;
-        sineFunctionButton = false;
-		if (playButton) {
-            terrainController.utils.function = (int)FunctionOption.ComplexSine;
-            terrainController.StartChanges();
-			playButtonText.text = "Pausar";
-        } else {
-            terrainController.StopChanges();
-			playButtonText.text = "Iniciar";
         }
     }
 
