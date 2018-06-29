@@ -13,18 +13,23 @@ public class RegionOfInterest : MonoBehaviour {
 	[SerializeField] private float lineWidth;
 	[SerializeField] private float depth = 5;
 
-	private static Coordinates coordinates;
+	public static Coordinates coordinates;
 	
 	private new Camera camera;
 	private Vector3 lineStartPoint;
+	private Vector3 pixelStartPoint;
 	private LineRenderer line;
 	private GameObject lineObject;
+	public static bool region;
 	
 	private void Start () {
 		camera = FindObjectOfType<Camera>();
 	}
 	
 	private void Update () {
+		if (!region)
+			return;
+		
 		if (Input.GetMouseButtonDown(0)) {
 			SetInitialCoordinates();
 		} else if (Input.GetMouseButtonUp(0)) {
@@ -36,12 +41,15 @@ public class RegionOfInterest : MonoBehaviour {
 
 	private void SetInitialCoordinates() {
 		lineStartPoint = GetMouseCameraPoint();
+		pixelStartPoint = Input.mousePosition;
+		print(lineStartPoint);
 		if (lineObject!=null)
 			Destroy(lineObject);
 	}
 
 	private void SetFinalCoordinates() {
 		Vector3 lineEndPoint = GetMouseCameraPoint();
+		Vector3 pixelEndPoint = Input.mousePosition;
 		lineEndPoint.y = lineStartPoint.y;
 
 		lineObject = new GameObject("RegionOfInterest"); 
@@ -57,10 +65,15 @@ public class RegionOfInterest : MonoBehaviour {
 		line.SetPosition(3, new Vector3(lineEndPoint.x, lineStartPoint.y, lineStartPoint.z));
 		line.SetPosition(4, lineStartPoint);
 		
-		coordinates.upR = new float[] {lineStartPoint.x, lineStartPoint.z};
-		coordinates.upL = new float[] {lineStartPoint.x, lineEndPoint.z};
-		coordinates.downR = new float[] {lineEndPoint.x, lineStartPoint.z};
-		coordinates.downL = new float[] {lineEndPoint.x, lineEndPoint.z};
+		coordinates.upR = new float[] {pixelStartPoint.x, pixelStartPoint.y};
+		coordinates.upL = new float[] {pixelStartPoint.x, pixelEndPoint.y};
+		coordinates.downR = new float[] {pixelEndPoint.x, pixelStartPoint.y};
+		coordinates.downL = new float[] {pixelEndPoint.x, pixelEndPoint.y};
+		
+		print(coordinates.upR[0]);
+		print(coordinates.upR[1]);
+		print(coordinates.downL[0]);
+		print(coordinates.downL[1]);
 		
 		lineStartPoint = Vector3.zero;
 	}

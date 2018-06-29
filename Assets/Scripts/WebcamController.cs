@@ -6,14 +6,19 @@ public class WebcamController : MonoBehaviour {
 
 	[SerializeField] private RawImage display;
 	[SerializeField] private Text startStopText;
-	[SerializeField] private Text createJPGText;
-	[SerializeField] private Text createJPG2Text;
+//	[SerializeField] private Text createJPGText;
+//	[SerializeField] private Text createJPG2Text;
 	
-	private int currentCamIndex = 0;
+	private int currentCamIndex;
 	private WebCamTexture texture;
 	private Texture2D snap;
 	private const string path = "Assets/Resources/Snapshots/";
-	
+
+	private void Start() {
+		currentCamIndex = WebCamTexture.devices.Length-1;
+		StartStopCam_Clicked();
+	}
+
 	public void SwitchCam_Clicked () {
 		if (WebCamTexture.devices.Length > 0) {
 			currentCamIndex += 1;
@@ -49,10 +54,16 @@ public class WebcamController : MonoBehaviour {
 		texture = null;
 	}
 	
-	private byte[] TakeSnapshot() {
+	public byte[] TakeSnapshot() {
 		snap.SetPixels(texture.GetPixels());
 		snap.Apply();
 		return snap.EncodeToJPG();
+	}
+	
+	public void TakeSnapshot(string fileName) {
+		snap.SetPixels(texture.GetPixels());
+		snap.Apply();
+		File.WriteAllBytes(/*path + */fileName, snap.EncodeToJPG());
 	}
 	
 	private void SaveSnapshot(byte[] image, string path, string fileName) {
@@ -66,7 +77,7 @@ public class WebcamController : MonoBehaviour {
 		// salva usando funcao da unity
 //		SaveSnapshot(myImage, path, "image_unity.jpg");
 		
-		createJPGText.text = "GerarJPG: " + (Time.realtimeSinceStartup - initial) * 1000 + " ms";
+//		createJPGText.text = "GerarJPG: " + (Time.realtimeSinceStartup - initial) * 1000 + " ms";
 		
 		// a chamada do metodo da dll precisa ser feita dentro desse bloco unsafe
 //		unsafe {
@@ -85,7 +96,7 @@ public class WebcamController : MonoBehaviour {
 		// salva usando funcao da unity
 		SaveSnapshot(myImage, path, "image_unity.jpg");
 		
-		createJPG2Text.text = "GerarJPG 2: " + (Time.realtimeSinceStartup - initial) * 1000 + " ms";
+//		createJPG2Text.text = "GerarJPG 2: " + (Time.realtimeSinceStartup - initial) * 1000 + " ms";
 		
 		// a chamada do metodo da dll precisa ser feita dentro desse bloco unsafe
 //		unsafe {

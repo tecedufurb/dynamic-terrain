@@ -6,10 +6,6 @@ using UnityEngine.UI;
 
 public class TerrainController : MonoBehaviour {
     
-//    [SerializeField] private Text plotHeightText;
-//    [SerializeField] private Text updateHeatMapText;
-//    [SerializeField] private Text pointsCountText;
-    
     public float maxHeight = 470;
     public int pointsCount;
     
@@ -100,6 +96,11 @@ public class TerrainController : MonoBehaviour {
         terrain.terrainData.SetHeights(0, 0, heights);
     }
     
+    public void PlotHeight2() {
+        float[,] heights = DllManager.GetHeight();
+        terrain.terrainData.SetHeights(0, 0, heights);
+    }
+    
 //    public IEnumerator PlotHeight (string fileName = "Assets\\Resources\\result3.xyz") {
 //        
 //        float initial = Time.realtimeSinceStartup;
@@ -130,9 +131,4 @@ public class TerrainController : MonoBehaviour {
 //        plotHeightText.text = "Mostrar terreno: " + (Time.realtimeSinceStartup - initial) * 1000 + " ms";
 //        pointsCountText.text = "Pontos: " + pointsCount;
 //    }
-
-    public void PlotHeight2() {
-        float[,] heights = DllManager.GetHeight();
-        terrain.terrainData.SetHeights(0, 0, heights);
-    }
 }
