@@ -6,7 +6,9 @@ using UnityEngine.UI;
 
 public class TerrainController : MonoBehaviour {
     
-    public float maxHeight = 470;
+//    public float maxHeight = 470;
+    public float far = 470;
+    public float near;
     public int pointsCount;
     
     private int offsetX = 200;
@@ -73,8 +75,8 @@ public class TerrainController : MonoBehaviour {
     }
 
     public void PlotHeight (string fileName = "Assets\\Resources\\result3.xyz") {
-        string[] lines = File.ReadAllLines(fileName);
-//        string[] lines = File.ReadAllLines("result3.xyz");
+//        string[] lines = File.ReadAllLines(fileName);
+        string[] lines = File.ReadAllLines("result3.xyz");
 
         pointsCount = 0;
         foreach (string line in lines) {
@@ -83,15 +85,19 @@ public class TerrainController : MonoBehaviour {
             int x = int.Parse(values[0]) + offsetX;
             int y = int.Parse(values[1]) + offsetY;
             float z = float.Parse(values[2]);
-            z = Math.Abs(z);
-            z = z / maxHeight;
 
-            if (z <= 1) {
-                heights[x, y] = z;
+            // inverte z
+            z = 0 - z;
+            
+            // limita por near e far
+            if (z < near || z > far)
+                z = 0;
+            else
                 pointsCount++;
-            } else {
-                heights[x, y] = 0;
-            }
+            
+            // normaliza
+            z = z / far;
+            heights[x, y] = z;
         }
         terrain.terrainData.SetHeights(0, 0, heights);
     }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class WebcamController : MonoBehaviour {
 
 	[SerializeField] private RawImage display;
-	[SerializeField] private Text startStopText;
+//	[SerializeField] private Text startStopText;
 //	[SerializeField] private Text createJPGText;
 //	[SerializeField] private Text createJPG2Text;
 	
@@ -19,7 +19,7 @@ public class WebcamController : MonoBehaviour {
 		StartStopCam_Clicked();
 	}
 
-	public void SwitchCam_Clicked () {
+	public void SwitchWebcam () {
 		if (WebCamTexture.devices.Length > 0) {
 			currentCamIndex += 1;
 			currentCamIndex %= WebCamTexture.devices.Length;
@@ -31,20 +31,17 @@ public class WebcamController : MonoBehaviour {
 		}
 	}
 
-	public void StartStopCam_Clicked () {
+	private void StartStopCam_Clicked () {
 	
 		if (texture != null) {
 			StopWebcam();
-			startStopText.text = "Start Camera";
 		} else {
 			WebCamDevice device = WebCamTexture.devices[currentCamIndex];
 			texture = new WebCamTexture(device.name);
 			display.texture = texture;
 			
 			texture.Play();	
-			startStopText.text = "Stop Camera";
 			snap = new Texture2D(texture.width, texture.height);
-//			print(texture.width + " x " + texture.height);
 		}
 	}
 	

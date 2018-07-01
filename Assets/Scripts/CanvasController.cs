@@ -10,111 +10,216 @@ public class CanvasController : MonoBehaviour {
     [SerializeField] private GameObject configurationPanel;
     [SerializeField] private Text pointsCountText;
     [SerializeField] private InputField farField;
+    [SerializeField] private InputField nearField;
+    [SerializeField] private InputField patternProjectionTimeField;
+    [SerializeField] private InputField imageProjectionTimeField;
     [SerializeField] private Texture2D[] patterns;
     [SerializeField] private Texture2D hipsometricTexture;
     [SerializeField] private RawImage projectionImage;
     [SerializeField] private Text projectionButtonText;
     [SerializeField] private GameObject displayPanel;
     [SerializeField] private Text displayButtonText;
-    [SerializeField] private Text regionButtonText;
     [SerializeField] private Text[] coordinatesText;
     [SerializeField] private WebcamController webcam;
-    
+    [SerializeField] private GameObject warningPanel;
+    [SerializeField] private Text warningPanelText;
+    [SerializeField] private GameObject patternFolderPanel;
+    [SerializeField] private InputField patternsFolderField;
+    [SerializeField] private InputField patternsAmountField;
+    [SerializeField] private InputField printsFolderField;
+    [SerializeField] private GameObject redDotPrefab;
+
     private bool terrainMapButton;
 
     private float projectionTime = 190;
     private float intervalTime = 1000;
+    
+    public Coordinates coordinates;
+    private bool region;
+    private byte clicksCount;
+    private string patternsFolder;
+    private string printsFolder;
+    private int patternsAmount;
 
-    private void Start() {
-        LoadPatterns("C:\\Users\\Nemo\\Desktop\\Patterns\\ConventionalGray", 10);
-    }
+//    private void Start() {
+//        LoadPatterns(patternsFolder, patternsAmount);
+//    }
 
     private void Update() {
         if (Input.GetKeyDown("escape"))
             configurationPanel.SetActive(!configurationPanel.activeSelf);
+        
+        if (region && Input.GetMouseButtonDown(0))
+            SetCoordinates(Input.mousePosition);
     }
 
+    /**
+     * Chamado no botao Mapa Hipsometrico do painel de configuracao
+     */
     public void ActivateHipsometricMap() {
         terrainMapButton = !terrainMapButton;
 
         if (terrainMapButton) {
-//            float initial = Time.realtimeSinceStartup;
+            //float initial = Time.realtimeSinceStartup;
             terrainController.UpdateHeatMap();
-//            updateHeatMapText.text = "Mapa hipsimétrico: " + (Time.realtimeSinceStartup - initial) * 1000 + " ms";
+            //updateHeatMapText.text = "Mapa hipsimétrico: " + (Time.realtimeSinceStartup - initial) * 1000 + " ms";
         }
         else {
             terrainController.ResetColor();
         }
+        configurationPanel.SetActive(false);
     }
 
+    /**
+     * Chamado no botao Mostrar terreno do painel de configuracao
+     */
     public void StartChanges() {
-//        float initial = Time.realtimeSinceStartup;
-        if (farField != null && farField.text != "")
-            terrainController.maxHeight = Convert.ToSingle(farField.text);
+        //float initial = Time.realtimeSinceStartup;
+        if (farField.text != "")
+            terrainController.far = Convert.ToSingle(farField.text);
+
+        if (nearField.text != "")
+            terrainController.near = Convert.ToSingle(nearField.text);
         
         terrainController.PlotHeight();
-//        plotHeightText.text = "Mostrar terreno: " + (Time.realtimeSinceStartup - initial) * 1000 + " ms";
+        //plotHeightText.text = "Mostrar terreno: " + (Time.realtimeSinceStartup - initial) * 1000 + " ms";
         pointsCountText.text = "Pontos: " + terrainController.pointsCount;
 
         if (terrainMapButton)
             terrainController.UpdateHeatMap();
+        
+        configurationPanel.SetActive(false);
     }
 
+    /**
+     * Chamado no botao Iniciar projecao do painel de configuracao
+     */
+    private Coroutine projection;
     public void StartProjection() {
         if (projectionImage.gameObject.activeSelf) {
-            StopCoroutine(Projection());
+            StopCoroutine(projection);
             projectionImage.gameObject.SetActive(false);
             projectionButtonText.text = "Ativar projeção";
         } else {
-            projectionImage.gameObject.SetActive(true);
-            configurationPanel.SetActive(false);
-            projectionButtonText.text = "Desativar projeção";
-            StartCoroutine(Projection());
+
+            if (patternsFolder == null || printsFolder == null) {
+                Warning("Defina as pastas de destino e origem dos padrões.");
+            } else {
+                if (patternProjectionTimeField.text != "")
+                    projectionTime = Convert.ToSingle(patternProjectionTimeField.text);
+                if (imageProjectionTimeField.text != "")
+                    intervalTime = Convert.ToSingle(imageProjectionTimeField.text);
+            
+                projectionImage.gameObject.SetActive(true);
+                configurationPanel.SetActive(false);
+                projectionButtonText.text = "Desativar projeção";
+                projection = StartCoroutine(Projection());
+            }
+        }
+    }
+    
+    public void ApplyPatternFoldersButton() {
+        if (patternsFolderField.text != "" && patternsAmountField.text != "" && printsFolderField.text != "") {
+            patternsFolder = patternsFolderField.text;
+            patternsAmount = Convert.ToInt32(patternsAmountField.text);
+            printsFolder = printsFolderField.text;
+            LoadPatterns(patternsFolder, patternsAmount);
+            BackPatternFoldersButton();
         }
     }
 
+    public void BackPatternFoldersButton() {
+        patternFolderPanel.SetActive(false);
+        configurationPanel.SetActive(true);
+    }
+    
+    public void ShowPatternFoldersPanel() {
+        configurationPanel.SetActive(false);
+        patternFolderPanel.SetActive(true);
+    }
+
+    /**
+     * Chamado no botao Mostrar webcam do painel de configuracao
+     */
+    public void ShowDisplayButton() {
+        displayButtonText.text = displayPanel.activeSelf ? "Mostrar webcam" : "Esconder webcam";
+        displayPanel.SetActive(!displayPanel.activeSelf);
+        configurationPanel.SetActive(false);
+    }
+
+    /**
+     * Chamado no botao Redefinir do painel de configuracao
+     */
+    public void SetRegionButton() {
+        configurationPanel.SetActive(false);
+        displayPanel.SetActive(true);
+        region = true;
+    }
+
+    /**
+     * Chamado no botao Trocar webcam do painel de configuracao
+     */
+    public void SwitchWebcamButton() {
+        webcam.SwitchWebcam();
+    }
+
+    public void Warning(string text) {
+        warningPanelText.text = text;
+        configurationPanel.SetActive(false);
+        warningPanel.SetActive(true);
+    }
+    
+    public void WarningButton() {
+        warningPanelText.text = "";
+        warningPanel.SetActive(false);
+        configurationPanel.SetActive(true);
+    }
+
     private IEnumerator Projection() {
-        
-        WaitForSeconds projection = new WaitForSeconds(projectionTime/1000);
-        WaitForSeconds interval = new WaitForSeconds(intervalTime/1000);
+        WaitForSeconds projection = new WaitForSeconds(projectionTime / 1000);
+        WaitForSeconds interval = new WaitForSeconds(intervalTime / 1000);
 
         int count = 0;
         int i = 0;
         while (true) {
             if (i == patterns.Length)
                 i = 0;
-            
+
             projectionImage.texture = patterns[i++];
             yield return projection;
-            webcam.TakeSnapshot("C:\\Users\\Nemo\\Desktop\\Patterns\\Output\\pattern" + count++ + ".jpg");
-//            image = webcam.TakeSnapshot();
-            
+            webcam.TakeSnapshot(printsFolder + "\\print" + count++ + ".jpg");
             projectionImage.texture = hipsometricTexture;
             yield return interval;
-//            File.WriteAllBytes("C:\\Users\\Nemo\\Desktop\\Patterns\\Output\\pattern" + count++ + ".jpg", image);  
         }
     }
 
-    public void ShowDisplay() {
-        displayButtonText.text = displayPanel.activeSelf ? "Mostrar webcam" : "Esconder webcam";
-        displayPanel.SetActive(!displayPanel.activeSelf);
+    private GameObject point;
+    private void SetCoordinates(Vector3 mousePosition) {
+        clicksCount++;
+        switch (clicksCount) {
+            case 1:
+                coordinates.x1 = (int)mousePosition.x;
+                coordinates.y1 = (int)mousePosition.y;
+                point = Instantiate(redDotPrefab, mousePosition, Quaternion.identity, gameObject.transform);
+                break;
+            case 2:
+                coordinates.x2 = (int)mousePosition.x;
+                coordinates.y2 = (int)mousePosition.y;
+                clicksCount = 0;
+                SetTextCoordinates();
+                Destroy(point);
+                break;
+        }
     }
 
-    public void RegionOfInterestButton() {
-        if (!RegionOfInterest.region) {
-            configurationPanel.SetActive(false);
-            displayPanel.SetActive(true);
-            RegionOfInterest.region = true;
-            regionButtonText.text = "Redefinir";
-        } else {
-            RegionOfInterest.region = false;
-            displayPanel.SetActive(false);
-            regionButtonText.text = "Selecionar";
-            coordinatesText[0].text = "X1: " + RegionOfInterest.coordinates.upR[0];
-            coordinatesText[1].text = "Y1: " + RegionOfInterest.coordinates.upR[1];
-            coordinatesText[2].text = "X2: " + RegionOfInterest.coordinates.downL[0];
-            coordinatesText[3].text = "Y2: " + RegionOfInterest.coordinates.downL[1];
-        }
+    private void SetTextCoordinates() {
+        region = false;
+        coordinatesText[0].text = "X1: " + coordinates.x1;
+        coordinatesText[1].text = "Y1: " + coordinates.y1;
+        coordinatesText[2].text = "X2: " + coordinates.x2;
+        coordinatesText[3].text = "Y2: " + coordinates.y2;
+        displayPanel.SetActive(false);
+        configurationPanel.SetActive(true);
     }
 
     private static Texture2D LoadJPG(string filePath) {
@@ -133,11 +238,4 @@ public class CanvasController : MonoBehaviour {
         for (int i = 0; i < amount; i++)
             patterns[i] = LoadJPG(filePath + "\\" + (i+1) + ".png");
     }
-
-//    private IEnumerator LoadImage (string filePath) {
-//        WWW www = new WWW (filePath);
-//        while(!www.isDone)
-//            yield return null;
-//        patters = www.texture;
-//    }
 }
